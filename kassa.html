@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<title>kassan</title>
+</head>
+
+<body onload="document.getElementById('pengar').innerHTML = 0">
+    <script>
+        "use strict";
+        /*
+        • Skapa en kassa där man kan sätta in och ta ut pengar.
+        • Det ska vara en hemsida (grafiskt gränssnitt)
+        • Summan som finns i kassan ska visas och den börjar på noll
+        • Finns ett fält där det endast går att välja ett nummer vilket är summan som sätts in eller tas ut
+        • Det ska finnas två knappar, IN och UT, när man trycker på dem tas pengar ut eller in. Summan blir aldrig mindre än
+        noll på kontot.
+        • När det är ett jämt tiotal i kassan (10, 20, 30, …) så visas det en stjärna (*) någonstans på sidan, tips: modulo
+        */
+        function Kassa() {
+            this.summa = 0;
+            let current = 0;
+            this.modulo = function (tio){   
+                if(tio%10==0){
+                        document.getElementById('star').innerHTML = "*";
+                }else{
+                        document.getElementById('star').innerHTML = "";
+                }
+            }
+            this.in = function (deposit) {
+                if (!Number.isInteger(deposit)) {
+                    alert('Inte en siffra!');
+                    exit();
+                }
+                this.summa += parseInt(deposit);  
+                document.getElementById('pengar').innerHTML = this.summa;  
+                this.modulo(this.summa);
+            };
+            this.ut = function (withdraw) {
+                if (!Number.isInteger(withdraw)) {
+                    alert('Inte en siffra!');
+                    exit();
+                }
+                current =  this.summa - withdraw;
+                if (current < 0) {
+                    alert("Det finns inte tillräckligt med pengar!");
+                } else {
+                    this.summa = current;
+                    document.getElementById('pengar').innerHTML = this.summa;
+                    this.modulo(this.summa);                  
+                }
+            };        
+        };
+        var kassa = new Kassa();
+    </script>
+</body>
+<b>Summa på kontot:<span id="pengar"></span></b></br>
+<input type="number" min = "0" id = "belopp"></input></br>
+<button type="button" 
+onclick="kassa.in(parseInt(document.getElementById('belopp').value))">
+IN</button>
+<button type="button" 
+onclick="kassa.ut(parseInt(document.getElementById('belopp').value))">
+UT</button></br>
+<span id="star"></span></br>
+</html>

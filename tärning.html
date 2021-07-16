@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<title>tärning</title>
+</head>
+
+<body>
+    <div>
+        Player 1 : <div id="1">
+            0
+        </div>
+    </div>
+    <div>
+        Player 2 : <div id="2">
+            0
+        </div>
+    </div>
+    <div>
+        Score : <div id="temp">
+            0
+        </div>
+    </div>
+    <div>
+        <div id="dice">
+        </div>
+    </div>
+    <div>
+        <div id="messageboard">
+        </div>
+        <div id="animated-example">
+            <div id="selectgame">
+                <div>
+                    <div>
+                        2 and 3 give extra rules when the sum is 70 and between 90 and 100<input type="checkbox"
+                            id="variant1" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+     "use strict";
+
+        /*
+            •	Du ska skapa tärningsspel (heter Pig på engelska) som ska spelas på en hemsida
+            •	Spelregler: Välj vem som börjar först. Spelaren kastar en 6-sidig tärning och summerar poängen, men ifall spelaren får en etta blir det inga poäng den rundan och det är den andre spelarens tur.
+             Men om spelaren avbryter kastandet innan det blir en etta så läggs poängen till spelarens totalsumma. Den som först kommer upp i 100 poäng vinner. Det ska alltså vara två spelare som turas om, man spelar inte mot datorn.
+            •	Det ska gå att välja att spela en specialvariant genom att kryssa i en checkruta. Då nollas rundans summa även om man får en tvåa ifall spelaren kommit upp i 70 poäng när rundan startar. 
+            Samt även för en trea ifall poängen är mellan 90 och 100.
+            •	Det är upp till dig att välja hur spelet ska utformas med knappar och interaktion.  Det behöver inte vara något animerat eller innehålla bilder, räcker med knappar och siffror.
+            •	Nedan finns bilder och länkar med inspiration samt regler på engelska (endast grundreglerna)
+        */
+        function Game(player1, player2, active) {
+            this.player1 = player1;
+            this.player2 = player2;
+            this.active = active;
+            this.current = 0;
+            this.randomIntFromInterval = function (min, max) { // min and max included 
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+            this.changePlayer = function () {
+                this.active.summa += this.current;
+                this.current = 0;
+                document.getElementById(this.active.num).innerHTML = this.active.summa;
+                document.getElementById("temp").innerHTML = 0;
+                if (this.active.num == 1) {
+                    this.active = this.player2;
+                } else {
+                    this.active = this.player1;
+                }
+            };
+            this.in = function () {
+                let dice = 0;
+                dice = this.randomIntFromInterval(1, 6);
+                alert("You rolled: " + dice);
+                if (document.getElementById("variant1").checked) {
+                    if ((dice == 2 && active.summa >= 70) || (dice == 3 && (active.summa <= 100 && active.summa >= 90))) {
+                        dice = 0;   
+                        this.current = 0;
+                        this.changePlayer(); 
+                    }
+                }
+                if (dice == 1) {
+                    dice = 0;
+                    this.current = 0;
+                    this.changePlayer();
+                }
+                this.current += dice;
+                if (this.active.summa + this.current >= 100) {
+                    alert("Player " + active.num + " has won!");
+                    location.reload(true);
+                }
+                document.getElementById("temp").innerHTML = this.current;
+            }
+        };
+        function Player(num, summa = 0){
+            this.num = num;
+            this.summa = summa;
+        }
+        let player1 = new Player(1);
+        let player2 = new Player(2);
+        let active = player1;
+        let game = new Game(player1, player2, active);
+    </script>
+    <div>
+        <div>
+            <button type="button" id="btn_randRoll" onclick="game.in()">
+                Roll Dice</button>
+            <button type="button" id="btn_stop" onclick="game.changePlayer()">
+                Pass Turn</button>
+        </div>
+    </div>
+</body>
+</html>
